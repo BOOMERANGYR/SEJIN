@@ -72,7 +72,7 @@ class _Question extends StatelessWidget {
             Column(
               children: [
                 Text("우리가 연애를 시작한 날,"),
-                Text("갔던 술집 이름은?"),
+                Text("같이 갔던 술집 이름은?"),
               ],
             ),
           ],
