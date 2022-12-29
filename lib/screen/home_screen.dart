@@ -23,34 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _Notice(),
                 _Question(),
-                _BottomPart(),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Notice extends StatelessWidget {
-  const _Notice({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: 0.8,
-      child: Container(
-        color: Colors.black,
-        child: Text(
-          "정답을 맞추면 입장가능합니다.",
-          style: TextStyle(
-            fontSize: 30,
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
           ),
         ),
       ),
@@ -63,30 +40,53 @@ class _Question extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: 0.8,
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Column(
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          Container(
+            height: 180,
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("우리가 연애를 시작한 날,"),
-                Text("같이 갔던 술집 이름은?!"),
+                Column(
+                  children: [
+                    Text("우리가 연애를 시작한 날,",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w700)),
+                    Text("같이 갔던 술집 이름은?!",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w700)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    decoration: new InputDecoration(hintText: "정답을 입력하세요."),
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              alignment: Alignment.center,
+              fixedSize: Size(300, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              )
+            ),
+            onPressed: () {},
+            child: Text("다음단계로 이동",
+            style: TextStyle(fontSize: 25),),
+          ),
+        ],
       ),
     );
-  }
-}
-
-class _BottomPart extends StatelessWidget {
-  const _BottomPart({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField();
   }
 }
