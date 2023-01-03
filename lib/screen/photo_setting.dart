@@ -20,7 +20,7 @@ class _PhotoSettingState extends State<PhotoSetting> {
             PhotoShow(photoOrder: photoOrder.toInt()),
             Slider(
                 value: photoOrder,
-                max: 1,
+                max: 2,
                 min: 0,
                 onChanged: (double val) {
                   setState(() {
@@ -36,7 +36,7 @@ class _PhotoSettingState extends State<PhotoSetting> {
 }
 
 class PhotoShow extends StatelessWidget {
-  final photoOrder ;
+  final int photoOrder ;
 
   const PhotoShow({
     required this.photoOrder, Key? key,
