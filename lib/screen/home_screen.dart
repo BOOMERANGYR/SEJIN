@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:marry_project/screen/photo_setting.dart';
 
@@ -10,7 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<int> imageOrder = [0, 1, 2, 3, 4];
+  int mainPhoto = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -19,31 +18,63 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return PhotoSetting();
-                      }
-                  ),
-                );
-              },
-              icon: Icon(Icons.settings),
+            _Header(mainPhoto: mainPhoto,
+              onPressd: (){settingOnPressed();},
             ),
-            ChoicePhoto(),
+            _ChoicePhoto(mainPhoto: mainPhoto,
+            ),
           ],
         ),
       ),
     );
   }
+
+  settingOnPressed() async {
+    final result = await Navigator.of(context).push<int>(
+      MaterialPageRoute(
+          builder: (BuildContext context) {
+            return PhotoSetting(
+              photoOrder: mainPhoto,
+            );
+          }
+      ),
+    );
+    if (result != null) {
+      setState(() {
+        mainPhoto = result;
+      });
+    }
+  }
 }
 
-class ChoicePhoto extends StatelessWidget {
-  const ChoicePhoto({Key? key}) : super(key: key);
+class _Header extends StatelessWidget {
+  final int mainPhoto;
+  final VoidCallback onPressd;
+
+  const _Header({
+    required this.mainPhoto,
+    required this.onPressd, Key? key,})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: Image.asset('assets/1.jpeg'));
+    return IconButton(
+      onPressed: onPressd,
+      icon: Icon(Icons.settings),
+    );
+  }
+}
+
+
+class _ChoicePhoto extends StatelessWidget {
+  final mainPhoto;
+  const _ChoicePhoto({required this.mainPhoto, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: mainPhoto.toString().split('').map((e) =>
+          Image.asset('assets/$e.jpeg')).toList(),
+    );
   }
 }
