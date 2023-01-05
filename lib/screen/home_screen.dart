@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marry_project/screen/photo_setting.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:marry_project/screen/video_player.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int mainPhoto = 0;
+  XFile? video;
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +21,15 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _Header(mainPhoto: mainPhoto,
-              onPressd: (){settingOnPressed();},
+            _Header(
+              mainPhoto: mainPhoto,
+              onPressd: () {
+                settingOnPressed();
+              },
             ),
-            _ChoicePhoto(mainPhoto: mainPhoto,
+            _ChoicePhoto(
+              mainPhoto: mainPhoto,
+              onTap: onPhotoTap,
             ),
           ],
         ),
@@ -31,13 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   settingOnPressed() async {
     final result = await Navigator.of(context).push<int>(
-      MaterialPageRoute(
-          builder: (BuildContext context) {
-            return PhotoSetting(
-              photoOrder: mainPhoto,
-            );
-          }
-      ),
+      MaterialPageRoute(builder: (BuildContext context) {
+        return PhotoSetting(
+          photoOrder: mainPhoto,
+        );
+      }),
     );
     if (result != null) {
       setState(() {
@@ -45,6 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+  void onPhotoTap() async {
+    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if(video != null){
+      setState(() {
+        this.video = video;
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => VideoPlayer1(video: video!,))
+        );
+      });
+    }
+  }
+
 }
 
 class _Header extends StatelessWidget {
@@ -53,8 +71,9 @@ class _Header extends StatelessWidget {
 
   const _Header({
     required this.mainPhoto,
-    required this.onPressd, Key? key,})
-      : super(key: key);
+    required this.onPressd,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,16 +84,27 @@ class _Header extends StatelessWidget {
   }
 }
 
-
 class _ChoicePhoto extends StatelessWidget {
-  final mainPhoto;
-  const _ChoicePhoto({required this.mainPhoto, Key? key}) : super(key: key);
+  final int mainPhoto;
+  final VoidCallback onTap;
+
+  const _ChoicePhoto({
+    required this.mainPhoto,
+    required this.onTap,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: mainPhoto.toString().split('').map((e) =>
-          Image.asset('assets/$e.jpeg')).toList(),
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: mainPhoto
+            .toString()
+            .split('')
+            .map((e) => Image.asset('assets/$e.jpeg'))
+            .toList(),
+      ),
     );
   }
 }
